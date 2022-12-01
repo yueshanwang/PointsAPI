@@ -10,4 +10,4 @@ Follow these steps to run this API
 6. Using postman, create new HTTP requests and send them to **localhost:4000** to interact with the web service
 7. http://localhost:4000/api/add will call the add transaction route. You will need to define the body of the request using a JSON and specify a "payer" and "points"
 8. http://localhost:4000/api/spend will call the spend points route. Specify a positive amount of points in the url to spend
-9.http://localhost:4000/api/balances will call the payer point balances route
+9. http://localhost:4000/api/balances will call the payer point balances route
