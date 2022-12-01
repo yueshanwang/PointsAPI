@@ -10,7 +10,7 @@ var transactions = []
 //array of remaining points still spendable
 var remainingPoints = []
 
-//comparison function that compares based on timestamp
+//comparison function that compares based on timestamp, will be used to sort from earliest to latest
 function compare(a,b) {
 
     if (a.timestamp < b.timestamp){
@@ -21,10 +21,6 @@ function compare(a,b) {
      }
     return 0;
 }
-
-app.get('/', (req, res) => {
-    res.send('Welcome to Yueshan\'s web service');
-});
 
 //add transaction route
 app.put("/api/add", (req, res) =>{
@@ -45,12 +41,14 @@ app.put("/api/add", (req, res) =>{
         timestampJSON = new Date().toJSON();
     }
 
+  //json object for transactions array
   const transaction = {
     payer: req.body.payer,
     points: req.body.points,
     timestamp: timestampJSON
   };
 
+  //json object for remaining array
   const remaining = {
       payer: req.body.payer,
       points: req.body.points,
@@ -109,20 +107,19 @@ app.post('/api/spend/:amount', (req, res) => {
 
     //adding spend transactions to transaction list
     for (let [key, value] of map){
-
         const timestampJSON = new Date().toJSON();
         const transaction = {
             payer: key,
             points: value,
             timestamp: timestampJSON
         };
-
         transactions.push(transaction);
         transactions.sort(compare);
     }
+
+    //creating array of json objects to return
     var toReturn = [];
     for (let [key, value] of map){
-
         const json = {
             payer: key,
             points: value
@@ -137,6 +134,7 @@ app.post('/api/spend/:amount', (req, res) => {
 //return all payer point balances route
 app.get('/api/balances', (req, res) => {
 
+  //map of payers to remaining point balances
   var map = new Map();
   for (var i = 0; i < transactions.length; i++) {
       var obj = transactions[i];
@@ -150,7 +148,6 @@ app.get('/api/balances', (req, res) => {
   }
 
     const json = JSON.stringify(Object.fromEntries(map));
-
     res.send(json);
 });
 
